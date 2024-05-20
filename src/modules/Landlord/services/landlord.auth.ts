@@ -5,8 +5,10 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequest, Unauthorized } from "../../../errors";
 import { InternalServerError } from "../../../errors/internalServerError";
 import { User } from "../../../users/user/user";
+import jwt from "jsonwebtoken";
+import { config } from "../../../configurations/config";
 
-export class landlordAuthLogics {
+export class LandlordAuthLogics {
   private user = new User();
   private utils = new ServerUtils();
   public signup: RequestHandler = async (req, res, next) => {
@@ -20,6 +22,15 @@ export class landlordAuthLogics {
           userType: "landlord",
         },
       });
+      // const token = jwt.sign({ id: landlord.id }, config.jwt.JWT_SECRET, {
+      //   expiresIn: "30d",
+      // });
+      console.log(landlord.id);
+      res.status(StatusCodes.OK).json({
+        message: "Account created successfully",
+        // token,
+        landlord,
+      });
     } catch (error) {
       next(error);
     }
@@ -28,19 +39,17 @@ export class landlordAuthLogics {
     const { email, password } = req.body;
     try {
       const getLandlordByEmail = await this.user.findUserByEmail(email);
-      if (getLandlordByEmail.userType !== "school") {
-        throw new BadRequest("Permission denied. Use a school login details");
+      if (getLandlordByEmail.userType !== "landlord") {
+        throw new BadRequest("Permission denied. Use a landlord login details");
       }
-      if (!getLandlordByEmail.isEmailVerified) {
-        throw new BadRequest("Please verify email address");
-      }
+
       await this.utils.validatePassword(
         password,
         getLandlordByEmail.password as string
       );
-      const token = this.utils.createToken(getLandlordByEmail?.id as string);
+      // const token = this.utils.createToken(getLandlordByEmail?.id as string);
       const landlordCredentials = {
-        token,
+        // token,
         landlordUserId: getLandlordByEmail?.id,
       };
       res

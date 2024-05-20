@@ -17,6 +17,14 @@ export class ServerUtils {
     const hashedPassword = await bcrypt.hash(password, await this.salt());
     return hashedPassword;
   };
+  public generateOTP(): string {
+    const OTP = otpGenerator.generate(5, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+      digits: true,
+    });
+    return OTP;
+  }
   public async validatePassword(
     password: string,
     comparePassword: string

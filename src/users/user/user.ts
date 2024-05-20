@@ -26,7 +26,7 @@ export class User {
       },
     });
     if (user) {
-      throw new BadRequest("This is email is taken by another user");
+      throw new BadRequest("This email is taken by another user");
     }
     return user;
   };

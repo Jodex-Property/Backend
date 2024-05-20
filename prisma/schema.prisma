@@ -22,23 +22,20 @@ model JodexAdmin {
 }
 
 model User {
-  id               String     @id @unique @default(uuid())
-  avatar           String
-  isEmailVerified  Boolean
-  profileCompleted Boolean
-  userType         UserType
-  profilePicture   String?
-  userName         String?    @unique
-  imageUrl         String?    @unique
-  email            String     @unique
-  password         String
-  userToken        UserToken?
-  company          String     @default("Jodex")
-  landlord         Landlord?
-  tenant           Tenant?    @relation(fields: [tenantId], references: [id])
-  createdAt        DateTime?  @default(now())
-  updatedAt        DateTime?  @default(now())
-  tenantId         String?
+  id             String     @id @unique @default(uuid())
+  userType       UserType
+  profilePicture String?
+  userName       String?    @unique
+  imageUrl       String?    @unique
+  email          String     @unique
+  password       String
+  userToken      UserToken?
+  company        String     @default("Jodex")
+  landlord       Landlord?
+  tenant         Tenant?    @relation(fields: [tenantId], references: [id])
+  createdAt      DateTime?  @default(now())
+  updatedAt      DateTime?  @default(now())
+  tenantId       String?
 }
 
 model UserToken {
@@ -104,9 +101,9 @@ model Property {
   // tenantId   String
 }
 
-// model LandlordProperty {
-
-// }
+model LandlordProperty {
+  id String @id @unique @default(uuid())
+}
 
 enum UserType {
   landlord
