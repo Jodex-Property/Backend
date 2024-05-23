@@ -25,7 +25,7 @@ export class LandlordAuthLogics {
       // const token = jwt.sign({ id: landlord.id }, config.jwt.JWT_SECRET, {
       //   expiresIn: "30d",
       // });
-      console.log(landlord.id);
+      //console.log(landlord.id);
       res.status(StatusCodes.OK).json({
         message: "Account created successfully",
         // token,
