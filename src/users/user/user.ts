@@ -70,7 +70,7 @@ export class User {
       },
     });
     if (!landlord) {
-      throw new NotFoundError("School user not found");
+      throw new NotFoundError("Landlord user not found");
     }
     return landlord;
   };

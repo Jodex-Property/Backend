@@ -84,29 +84,29 @@ export class AuthMiddleware {
       next(error);
     }
   };
-  //   public parentAuth = async (
-  //     req: AuthRequest,
-  //     res: Response,
-  //     next: NextFunction
-  //   ) => {
-  //     try {
-  //       if (!req?.authId) {
-  //         throw new BadRequestError("authId not set");
-  //       }
-  //       const { parentId } = req.params;
-  //       const parent = await this.userRepository.findUserById(parentId);
-  //       if (parent.id !== req.authId) {
-  //         throw new UnauthorizedError("You are not authorized");
-  //       }
-  //       if (!parent.profileCompleted) {
-  //         throw new UnauthorizedError("Please complete profile registration");
-  //       }
-  //       if (parent.status === "BLOCKED") {
-  //         throw new UnauthorizedError("Your account is blocked or deactivated");
-  //       }
-  //       next();
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   };
+  public tenantAuth = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      if (!req?.authId) {
+        throw new BadRequest("authId not set");
+      }
+      const { tenantId } = req.params;
+      const tenant = await this.userRepository.findUserById(tenantId);
+      if (tenant.id !== req.authId) {
+        throw new Unauthorized("You are not authorized");
+      }
+      // if (!parent.profileCompleted) {
+      //   throw new Unauthorized("Please complete profile registration");
+      // }
+      // if (parent.status === "BLOCKED") {
+      //   throw new Unauthorized("Your account is blocked or deactivated");
+      // }
+      // next();
+    } catch (error) {
+      next(error);
+    }
+  };
 }

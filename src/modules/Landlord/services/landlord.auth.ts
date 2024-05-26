@@ -6,26 +6,44 @@ import { BadRequest, Unauthorized } from "../../../errors";
 import { InternalServerError } from "../../../errors/internalServerError";
 import { User } from "../../../users/user/user";
 import jwt from "jsonwebtoken";
+//import { LandlordEmails } from "../email/email";
 import { config } from "../../../configurations/config";
 
 export class LandlordAuthLogics {
   private user = new User();
   private utils = new ServerUtils();
+ // private landlordEmail = new LandlordEmails();
   public signup: RequestHandler = async (req, res, next) => {
-    const { password, email } = req.body;
+    const { password, email, userName } = req.body;
     try {
       await this.user.doesUserExistByEmail(email);
       const landlord = await prisma.user.create({
         data: {
           email: email,
           password: await this.utils.hashPassword(password),
+          isEmailVerified: false,
+          profileCompleted: false,
+          userName: userName,
           userType: "landlord",
         },
       });
-      // const token = jwt.sign({ id: landlord.id }, config.jwt.JWT_SECRET, {
-      //   expiresIn: "30d",
+      // const token = this.utils.generateOTP();
+      // await this.landlordEmail.sendLandlordRegistrationMessage({
+      //   email: landlord.email,
       // });
-      //console.log(landlord.id);
+      // const updateOtp = await prisma.userToken.upsert({
+      //   where: { userId: landlord?.id },
+      //   create: {
+      //     token: token,
+      //     userId: landlord.id,
+      //     tokenGeneratedTime: new Date(),
+      //   },
+      //   update: {
+      //     token: token,
+      //     userId: landlord.id,
+      //     tokenGeneratedTime: new Date(),
+      //   },
+      // });
       res.status(StatusCodes.OK).json({
         message: "Account created successfully",
         // token,
@@ -59,4 +77,5 @@ export class LandlordAuthLogics {
       next(error);
     }
   };
+  
 }

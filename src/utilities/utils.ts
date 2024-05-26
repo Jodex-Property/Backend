@@ -12,6 +12,7 @@ interface removeItemType {
 }
 
 export class ServerUtils {
+  
   public salt = async () => await bcrypt.genSalt(10);
   public hashPassword = async (password: string) => {
     const hashedPassword = await bcrypt.hash(password, await this.salt());
