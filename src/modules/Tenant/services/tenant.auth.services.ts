@@ -13,7 +13,7 @@ export class TenantAuthServices {
   private user = new User();
 
   public signup: RequestHandler = async (req, res, next) => {
-    const { password, email } = req.body;
+    const { password, email, userName } = req.body;
     try {
       const findTenant = await prisma.user.findUnique({
         where: {
@@ -28,11 +28,15 @@ export class TenantAuthServices {
           email: email,
           password: await this.utils.hashPassword(password),
           userType: "tenant",
+          isEmailVerified: false,
+          profileCompleted: false,
+          userName: userName,
         },
       });
       res.status(StatusCodes.OK).json({
         message:
           "Account created successfully, please verify your email address",
+          tenant
       });
     } catch (error) {
       next(error);

@@ -22,20 +22,23 @@ model JodexAdmin {
 }
 
 model User {
-  id             String     @id @unique @default(uuid())
-  userType       UserType
-  profilePicture String?
-  userName       String?    @unique
-  imageUrl       String?    @unique
-  email          String     @unique
-  password       String
-  userToken      UserToken?
-  company        String     @default("Jodex")
-  landlord       Landlord?
-  tenant         Tenant?    @relation(fields: [tenantId], references: [id])
-  createdAt      DateTime?  @default(now())
-  updatedAt      DateTime?  @default(now())
-  tenantId       String?
+  id               String         @id @unique @default(uuid())
+  isEmailVerified  Boolean
+  profileCompleted Boolean
+  status           LandlordStatus @default(BLOCKED)
+  userType         UserType
+  profilePicture   String?
+  userName         String         @unique
+  imageUrl         String?        @unique
+  email            String         @unique
+  password         String
+  userToken        UserToken?
+  company          String         @default("Jodex")
+  landlord         Landlord?
+  tenant           Tenant?
+  createdAt        DateTime?      @default(now())
+  updatedAt        DateTime?      @default(now())
+  tenantId         String?
 }
 
 model UserToken {
@@ -50,36 +53,35 @@ model UserToken {
 }
 
 model Landlord {
-  id               String             @id @unique @default(uuid())
-  userId           String             @unique
-  user             User               @relation(fields: [userId], references: [id])
-  userName         String
-  phoneNumber      String             @unique
-  email            String
-  password         String
-  passwordConfirm  String
-  tenants          LandlordTenant[]
-  property         Property[]
-  company          String             @default("Jodex")
-  createdAT        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  LandlordProperty LandlordProperty[]
+  id              String           @id @unique @default(uuid())
+  userId          String           @unique
+  user            User             @relation(fields: [userId], references: [id])
+  userName        String
+  phoneNumber     String           @unique
+  email           String
+  password        String
+  passwordConfirm String
+  tenants         LandlordTenant[]
+  property        Property[]
+  company         String           @default("Jodex")
+  createdAT       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model Tenant {
   id                 String           @id @unique @default(uuid())
   userName           String
   email              String
+  userId             String           @unique
+  user               User             @relation(fields: [userId], references: [id])
   password           String
   passwordConfirm    String
-  landlord           LandlordTenant[]
-  property           LandlordProperty @relation(fields: [landlordPropertyId], references: [id])
+  landlords          LandlordTenant[]
+  property           Property         @relation(fields: [landlordPropertyId], references: [id])
   createdAT          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
-  User               User[]
   company            String           @default("Jodex")
   landlordPropertyId String
-  Property           Property[]
 }
 
 model LandlordTenant {
@@ -92,29 +94,36 @@ model LandlordTenant {
 }
 
 model Property {
-  id               String             @id @unique @default(uuid())
-  rooms            Int
-  address          String
-  landlord         Landlord           @relation(fields: [landlordId], references: [id])
-  landlordId       String
-  createdAT        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  company          String             @default("Jodex")
-  tenant           Tenant             @relation(fields: [tenantId], references: [id])
-  tenantId         String
-  LandlordProperty LandlordProperty[]
-}
-
-model LandlordProperty {
-  id         String   @id @unique @default(uuid())
-  property   Property @relation(fields: [propertyId], references: [id])
-  propertyId String
-  landlord   Landlord @relation(fields: [landlordId], references: [id])
-  landlordId String
-  Tenant     Tenant[]
+  id          String   @id @unique @default(uuid())
+  flat        String
+  unit        Int
+  city        String
+  state       String
+  zipCode     Int
+  description String
+  rooms       Int
+  bath        Int
+  kitchen     Int
+  diningRoom  Int
+  pictures    String
+  garage      Boolean
+  wifi        Boolean
+  houseType   String
+  address     String
+  landlord    Landlord @relation(fields: [landlordId], references: [id])
+  landlordId  String
+  createdAT   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  company     String   @default("Jodex")
+  Tenant      Tenant[]
 }
 
 enum UserType {
   landlord
   tenant
+}
+
+enum LandlordStatus {
+  ACTIVE
+  BLOCKED
 }
