@@ -27,23 +27,23 @@ export class LandlordAuthLogics {
           userType: "landlord",
         },
       });
-      const token = this.utils.generateOTP();
-      await this.landlordEmail.sendLandlordRegistrationMessage({
-        email: landlord.email,
-      });
-      const updateOtp = await prisma.userToken.upsert({
-        where: { userId: landlord?.id },
-        create: {
-          token: token,
-          userId: landlord.id,
-          tokenGeneratedTime: new Date(),
-        },
-        update: {
-          token: token,
-          userId: landlord.id,
-          tokenGeneratedTime: new Date(),
-        },
-      });
+      // const token = this.utils.generateOTP();
+      // await this.landlordEmail.sendLandlordRegistrationMessage({
+      //   email: landlord.email,
+      // });
+      // const updateOtp = await prisma.userToken.upsert({
+      //   where: { userId: landlord?.id },
+      //   create: {
+      //     token: token,
+      //     userId: landlord.id,
+      //     tokenGeneratedTime: new Date(),
+      //   },
+      //   update: {
+      //     token: token,
+      //     userId: landlord.id,
+      //     tokenGeneratedTime: new Date(),
+      //   },
+      // });
       res.status(StatusCodes.OK).json({
         message: "Account created successfully",
         // token,
