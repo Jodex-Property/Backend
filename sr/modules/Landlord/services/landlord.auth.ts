@@ -12,7 +12,7 @@ import { config } from "../../../configurations/config";
 export class LandlordAuthLogics {
   private user = new User();
   private utils = new ServerUtils();
- // private landlordEmail = new LandlordEmails();
+  // private landlordEmail = new LandlordEmails();
   public signup: RequestHandler = async (req, res, next) => {
     const { password, email, userName } = req.body;
     try {
@@ -27,23 +27,23 @@ export class LandlordAuthLogics {
           userType: "landlord",
         },
       });
-      // const token = this.utils.generateOTP();
-      // await this.landlordEmail.sendLandlordRegistrationMessage({
-      //   email: landlord.email,
-      // });
-      // const updateOtp = await prisma.userToken.upsert({
-      //   where: { userId: landlord?.id },
-      //   create: {
-      //     token: token,
-      //     userId: landlord.id,
-      //     tokenGeneratedTime: new Date(),
-      //   },
-      //   update: {
-      //     token: token,
-      //     userId: landlord.id,
-      //     tokenGeneratedTime: new Date(),
-      //   },
-      // });
+      const token = this.utils.generateOTP();
+      await this.landlordEmail.sendLandlordRegistrationMessage({
+        email: landlord.email,
+      });
+      const updateOtp = await prisma.userToken.upsert({
+        where: { userId: landlord?.id },
+        create: {
+          token: token,
+          userId: landlord.id,
+          tokenGeneratedTime: new Date(),
+        },
+        update: {
+          token: token,
+          userId: landlord.id,
+          tokenGeneratedTime: new Date(),
+        },
+      });
       res.status(StatusCodes.OK).json({
         message: "Account created successfully",
         // token,
@@ -77,5 +77,4 @@ export class LandlordAuthLogics {
       next(error);
     }
   };
-  
 }
