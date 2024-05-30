@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { login } from "../controller/auth";
+import { signup } from "../controller/auth";
 
 const landlordRoute: Router = Router();
-landlordRoute.post("/login", login);
+landlordRoute.post("/signup ", signup);
 
 export default landlordRoute;

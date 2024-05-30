@@ -4,6 +4,8 @@ import appRouter from "./routes/apiRoute";
 import { PrismaClient } from "@prisma/client";
 
 const app: Express = express();
+import cors from "cors";
+app.use(cors({ credentials: true, origin: "*" }));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Jodex property app");

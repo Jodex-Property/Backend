@@ -21,61 +21,24 @@ model JodexAdmin {
   updatedAt DateTime @default(now())
 }
 
-model User {
-  id               String         @id @unique @default(uuid())
-  isEmailVerified  Boolean
-  profileCompleted Boolean
-  status           LandlordStatus @default(BLOCKED)
-  userType         UserType
-  profilePicture   String?
-  userName         String         @unique
-  imageUrl         String?        @unique
-  email            String         @unique
-  password         String
-  userToken        UserToken?
-  company          String         @default("Jodex")
-  landlord         Landlord?
-  tenant           Tenant?
-  createdAt        DateTime?      @default(now())
-  updatedAt        DateTime?      @default(now())
-  tenantId         String?
-}
-
-model UserToken {
-  id                 String   @id @unique @default(uuid())
-  token              String   @unique
-  tokenGeneratedTime DateTime
-  userId             String   @unique
-  user               User     @relation(fields: [userId], references: [id])
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @default(now())
-  company            String   @default("Jodex")
-}
-
 model Landlord {
-  id              String           @id @unique @default(uuid())
-  userId          String           @unique
-  user            User             @relation(fields: [userId], references: [id])
-  userName        String
-  phoneNumber     String           @unique
-  email           String
-  password        String
-  passwordConfirm String
-  tenants         LandlordTenant[]
-  property        Property[]
-  company         String           @default("Jodex")
-  createdAT       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  id          String           @id @unique @default(uuid())
+  userName    String
+  phoneNumber String?          @unique
+  email       String
+  password    String
+  tenants     LandlordTenant[]
+  property    Property[]
+  company     String           @default("Jodex")
+  createdAT   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model Tenant {
   id                 String           @id @unique @default(uuid())
   userName           String
   email              String
-  userId             String           @unique
-  user               User             @relation(fields: [userId], references: [id])
   password           String
-  passwordConfirm    String
   landlords          LandlordTenant[]
   property           Property         @relation(fields: [landlordPropertyId], references: [id])
   createdAT          DateTime         @default(now())
