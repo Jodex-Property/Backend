@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { login } from "../controller/auth";
+import { signup } from "../controller/auth";
+//import { login } from "../controller/auth";
 
 const tenantRoute: Router = Router();
-tenantRoute.post("/login", login);
+tenantRoute.post("/signup", signup);
 
 export default tenantRoute;

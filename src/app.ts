@@ -4,6 +4,7 @@ import appRouter from "./routes/apiRoute";
 import { PrismaClient } from "@prisma/client";
 
 const app: Express = express();
+app.use(express.json());
 import cors from "cors";
 app.use(cors({ credentials: true, origin: "*" }));
 
