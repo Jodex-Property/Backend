@@ -6,7 +6,11 @@ import { PrismaClient } from "@prisma/client";
 const app: Express = express();
 app.use(express.json());
 import cors from "cors";
+
 app.use(cors({ credentials: true, origin: "*" }));
+
+app.use(cors({ credentials: true, origin: "*" }));
+app.options("*", cors());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Jodex property app");
