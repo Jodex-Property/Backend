@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon",
-    "migrate": "prisma migrate deploy"
+    "migrate": "npx prisma migrate deploy"
   },
   "author": "feeleep",
   "license": "ISC",
