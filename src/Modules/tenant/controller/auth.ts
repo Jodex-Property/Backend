@@ -27,7 +27,7 @@ export const login = async (req: Request, res: Response) => {
 
   let tenant = await prisma.tenant.findFirst({ where: { email } });
   if (!tenant) {
-    throw Error("tenant does not exist");
+    throw Error("This tenant does not exist");
   }
   if (!compareSync(password, tenant.password)) {
     throw Error("incorrect password");
