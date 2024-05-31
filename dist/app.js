@@ -11,6 +11,7 @@ const client_1 = require("@prisma/client");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const cors_1 = __importDefault(require("cors"));
+const error_1 = require("./midlewares/error");
 app.use((0, cors_1.default)({ credentials: true, origin: "*" }));
 app.use((0, cors_1.default)({ credentials: true, origin: "*" }));
 app.options("*", (0, cors_1.default)());
@@ -21,6 +22,7 @@ app.use("/api/v1", apiRoute_1.default);
 exports.prisma = new client_1.PrismaClient({
     log: ["query"],
 });
+app.use(error_1.errorMiddleware);
 app.listen(secrets_1.PORT, () => {
     console.log("App is working");
 });

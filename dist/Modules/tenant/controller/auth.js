@@ -37,20 +37,31 @@ const app_1 = require("../../../app");
 const bcrypt_1 = require("bcrypt");
 const jwt = __importStar(require("jsonwebtoken"));
 const secrets_1 = require("../../../secrets");
-const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, userName } = req.body;
-    let tenant = yield app_1.prisma.tenant.findFirst({ where: { email } });
-    if (tenant) {
-        throw Error("Landlord already exists");
+const badReuest_1 = require("../../../exceptions/badReuest");
+const root_1 = require("../../../exceptions/root");
+const validation_1 = require("../../../exceptions/validation");
+const users_1 = require("../../../Schema/tenantSchema/users");
+const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        users_1.TenantSignUpSchema.parse(req.body);
+        const { email, password, userName } = req.body;
+        let tenant = yield app_1.prisma.tenant.findFirst({ where: { email } });
+        if (tenant) {
+            next(new badReuest_1.BadRequests("Tenant already exists", root_1.ErrorCodes.USER_ALREADY_EXISTS));
+        }
+        tenant = yield app_1.prisma.tenant.create({
+            data: {
+                email,
+                password: (0, bcrypt_1.hashSync)(password, 10),
+                userName,
+            },
+        });
+        res.status(201).json({ tenant });
     }
-    tenant = yield app_1.prisma.tenant.create({
-        data: {
-            email,
-            password: (0, bcrypt_1.hashSync)(password, 10),
-            userName,
-        },
-    });
-    res.status(201).json({ tenant });
+    catch (err) {
+        next(new validation_1.UnprocessableEntity((_a = err === null || err === void 0 ? void 0 : err.cause) === null || _a === void 0 ? void 0 : _a.issues, "Unprocessable error", root_1.ErrorCodes.UNPROCESSABLE_ENTITY));
+    }
 });
 exports.signup = signup;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
