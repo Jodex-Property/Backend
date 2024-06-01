@@ -53,13 +53,13 @@ export const signup = async (
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  let landlord = await prisma.landlord.findFirst({ where: { email } });
-  if (!landlord) {
+  let user = await prisma.user.findFirst({ where: { email } });
+  if (!user) {
     throw Error("Landlord does not exist");
   }
-  if (!compareSync(password, landlord.password)) {
+  if (!compareSync(password, user.password)) {
     throw Error("incorrect password");
   }
-  const token = jwt.sign({ userId: landlord.id }, JWT_SECRET);
-  res.status(201).json({ landlord, token });
+  const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+  res.status(201).json({ user, token });
 };

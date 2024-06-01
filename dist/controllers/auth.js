@@ -70,14 +70,14 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 exports.signup = signup;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    let landlord = yield app_1.prisma.landlord.findFirst({ where: { email } });
-    if (!landlord) {
+    let user = yield app_1.prisma.user.findFirst({ where: { email } });
+    if (!user) {
         throw Error("Landlord does not exist");
     }
-    if (!(0, bcrypt_1.compareSync)(password, landlord.password)) {
+    if (!(0, bcrypt_1.compareSync)(password, user.password)) {
         throw Error("incorrect password");
     }
-    const token = jwt.sign({ userId: landlord.id }, secrets_1.JWT_SECRET);
-    res.status(201).json({ landlord, token });
+    const token = jwt.sign({ userId: user.id }, secrets_1.JWT_SECRET);
+    res.status(201).json({ user, token });
 });
 exports.login = login;
