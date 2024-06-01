@@ -21,6 +21,22 @@ model JodexAdmin {
   updatedAt DateTime @default(now())
 }
 
+model User {
+  id              String   @id @unique @default(uuid())
+  userName        String
+  phoneNumber     String?  @unique
+  email           String
+  password        String
+  passwordConfirm String
+  picture         String?
+  // user            UserType
+  company         String   @default("Jodex")
+  createdAT       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("users")
+}
+
 model Landlord {
   id          String           @id @unique @default(uuid())
   userName    String
@@ -86,6 +102,7 @@ model Property {
 enum UserType {
   landlord
   tenant
+  Admin
 }
 
 enum LandlordStatus {

@@ -1,8 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const auth_1 = require("../controller/auth");
-const landlordRoute = (0, express_1.Router)();
-landlordRoute.post("/signup", auth_1.signup);
-landlordRoute.post("/login", auth_1.login);
-exports.default = landlordRoute;
+// import { Router } from "express";
+// import { login, signup } from "../controller/auth";
+// const landlordRoute: Router = Router();
+// landlordRoute.post("/signup", signup);
+// landlordRoute.post("/login", login);
+// export default landlordRoute;

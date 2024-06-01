@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const LandlordSignUpSchema = z.object({
+export const SignUpSchema = z.object({
   userName: z.string(),
   email: z.string().email(),
   password: z.string().min(6),

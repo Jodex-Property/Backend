@@ -11,7 +11,7 @@ const client_1 = require("@prisma/client");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const cors_1 = __importDefault(require("cors"));
-const error_1 = require("./midlewares/error");
+const error_1 = require("./middlewares/error");
 app.use((0, cors_1.default)({ credentials: true, origin: "*" }));
 app.use((0, cors_1.default)({ credentials: true, origin: "*" }));
 app.options("*", (0, cors_1.default)());

@@ -6,9 +6,9 @@ import { PrismaClient } from "@prisma/client";
 const app: Express = express();
 app.use(express.json());
 import cors from "cors";
-import { errorMiddleware } from "./midlewares/error";
+import { errorMiddleware } from "./middlewares/error";
 import { TenantSignUpSchema } from "./Schema/tenantSchema/users";
-import { LandlordSignUpSchema } from "./Schema/landlordSchema/landlord";
+import { SignUpSchema } from "./Schema/Schema/user";
 
 app.use(cors({ credentials: true, origin: "*" }));
 
