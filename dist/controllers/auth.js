@@ -39,43 +39,38 @@ const jwt = __importStar(require("jsonwebtoken"));
 const secrets_1 = require("../secrets");
 const badRequest_1 = require("../exceptions/badRequest");
 const root_1 = require("../exceptions/root");
-const validation_1 = require("../exceptions/validation");
 const user_1 = require("../Schema/Schema/user");
+const not_found_1 = require("../exceptions/not-found");
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        user_1.SignUpSchema.parse(req.body);
-        const { email, password, passwordConfirm, userName } = req.body;
-        if (password !== passwordConfirm) {
-            res.status(400).send("Make sure the passwords are the same");
-        }
-        let user = yield app_1.prisma.user.findFirst({ where: { email } });
-        if (user) {
-            next(new badRequest_1.BadRequests("Landlord already exists", root_1.ErrorCodes.USER_ALREADY_EXISTS));
-        }
-        user = yield app_1.prisma.user.create({
-            data: {
-                email,
-                password: (0, bcrypt_1.hashSync)(password, 10),
-                userName,
-                passwordConfirm: (0, bcrypt_1.hashSync)(passwordConfirm, 10),
-                //  user: landlord,
-            },
-        });
-        res.status(201).json({ user });
+    user_1.SignUpSchema.parse(req.body);
+    const { email, password, passwordConfirm, userName } = req.body;
+    if (password !== passwordConfirm) {
+        throw new badRequest_1.BadRequests("Passwords do no match", root_1.ErrorCodes.INCORRECT_PASSWORD);
     }
-    catch (err) {
-        next(new validation_1.UnprocessableEntity(err === null || err === void 0 ? void 0 : err.issues, "Unprocessable error", root_1.ErrorCodes.UNPROCESSABLE_ENTITY));
+    let user = yield app_1.prisma.user.findFirst({ where: { email } });
+    if (user) {
+        new badRequest_1.BadRequests("User already exists", root_1.ErrorCodes.USER_ALREADY_EXISTS);
     }
+    user = yield app_1.prisma.user.create({
+        data: {
+            email,
+            password: (0, bcrypt_1.hashSync)(password, 10),
+            userName,
+            passwordConfirm: (0, bcrypt_1.hashSync)(passwordConfirm, 10),
+            //  user: landlord,
+        },
+    });
+    res.status(201).json({ user });
 });
 exports.signup = signup;
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     let user = yield app_1.prisma.user.findFirst({ where: { email } });
     if (!user) {
-        throw Error("Landlord does not exist");
+        throw new not_found_1.NotFound("User does not exist", root_1.ErrorCodes.USER_NOT_FOUND);
     }
     if (!(0, bcrypt_1.compareSync)(password, user.password)) {
-        throw Error("incorrect password");
+        throw new badRequest_1.BadRequests("incorrect password", root_1.ErrorCodes.INCORRECT_PASSWORD);
     }
     const token = jwt.sign({ userId: user.id }, secrets_1.JWT_SECRET);
     res.status(201).json({ user, token });

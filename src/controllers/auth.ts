@@ -8,57 +8,50 @@ import { BadRequests } from "../exceptions/badRequest";
 import { ErrorCodes } from "../exceptions/root";
 import { UnprocessableEntity } from "../exceptions/validation";
 import { SignUpSchema } from "../Schema/Schema/user";
+import { NotFound } from "../exceptions/not-found";
 
 export const signup = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    SignUpSchema.parse(req.body);
-    const { email, password, passwordConfirm, userName } = req.body;
-    if (password !== passwordConfirm) {
-      res.status(400).send("Make sure the passwords are the same");
-    }
-
-    let user = await prisma.user.findFirst({ where: { email } });
-    if (user) {
-      next(
-        new BadRequests(
-          "Landlord already exists",
-          ErrorCodes.USER_ALREADY_EXISTS
-        )
-      );
-    }
-    user = await prisma.user.create({
-      data: {
-        email,
-        password: hashSync(password, 10),
-        userName,
-        passwordConfirm: hashSync(passwordConfirm, 10),
-        //  user: landlord,
-      },
-    });
-    res.status(201).json({ user });
-  } catch (err: any) {
-    next(
-      new UnprocessableEntity(
-        err?.issues,
-        "Unprocessable error",
-        ErrorCodes.UNPROCESSABLE_ENTITY
-      )
+  SignUpSchema.parse(req.body);
+  const { email, password, passwordConfirm, userName } = req.body;
+  if (password !== passwordConfirm) {
+    throw new BadRequests(
+      "Passwords do no match",
+      ErrorCodes.INCORRECT_PASSWORD
     );
   }
+
+  let user = await prisma.user.findFirst({ where: { email } });
+  if (user) {
+    new BadRequests("User already exists", ErrorCodes.USER_ALREADY_EXISTS);
+  }
+  user = await prisma.user.create({
+    data: {
+      email,
+      password: hashSync(password, 10),
+      userName,
+      passwordConfirm: hashSync(passwordConfirm, 10),
+      //  user: landlord,
+    },
+  });
+  res.status(201).json({ user });
 };
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password } = req.body;
 
   let user = await prisma.user.findFirst({ where: { email } });
   if (!user) {
-    throw Error("Landlord does not exist");
+    throw new NotFound("User does not exist", ErrorCodes.USER_NOT_FOUND);
   }
   if (!compareSync(password, user.password)) {
-    throw Error("incorrect password");
+    throw new BadRequests("incorrect password", ErrorCodes.INCORRECT_PASSWORD);
   }
   const token = jwt.sign({ userId: user.id }, JWT_SECRET);
   res.status(201).json({ user, token });

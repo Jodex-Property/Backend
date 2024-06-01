@@ -18,4 +18,6 @@ var ErrorCodes;
     ErrorCodes[ErrorCodes["USER_ALREADY_EXISTS"] = 1002] = "USER_ALREADY_EXISTS";
     ErrorCodes[ErrorCodes["INCORRECT_PASSWORD"] = 1003] = "INCORRECT_PASSWORD";
     ErrorCodes[ErrorCodes["UNPROCESSABLE_ENTITY"] = 2001] = "UNPROCESSABLE_ENTITY";
+    ErrorCodes[ErrorCodes["INTERNAL_EXCEPTION"] = 3001] = "INTERNAL_EXCEPTION";
+    ErrorCodes[ErrorCodes["UNAUTHORIZED"] = 40001] = "UNAUTHORIZED";
 })(ErrorCodes || (exports.ErrorCodes = ErrorCodes = {}));

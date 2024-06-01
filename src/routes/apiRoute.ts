@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { login, signup } from "../controllers/auth";
-import userRoute from "./userRoute";
+import userRoute from "./auth";
 //import landlordRoute from "../Modules/landlord/route/route";
 // import tenantRoute from "../Modules/tenant/route/route";
 
