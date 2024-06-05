@@ -24,6 +24,10 @@ export const prismaClient = new PrismaClient({
   log: ["query"],
 });
 
+/* The code `app.use(errorMiddleware);` is using the `errorMiddleware` function to handle errors in the
+Express application. This middleware function will be called whenever an error occurs during the
+request-response cycle. It helps in centralizing error handling logic and providing a consistent way
+to handle errors across the application. */
 app.use(errorMiddleware);
 app.listen(PORT, () => {
   console.log(`app is listening on port ${PORT}`);
