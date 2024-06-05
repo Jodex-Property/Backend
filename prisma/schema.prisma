@@ -29,7 +29,7 @@ model User {
   password        String
   passwordConfirm String
   picture         String?
-  // user            UserType
+  user            String
   company         String   @default("Jodex")
   createdAT       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -38,45 +38,31 @@ model User {
 }
 
 model Landlord {
-  id          String           @id @unique @default(uuid())
+  id          String     @id @unique @default(uuid())
   userName    String
-  phoneNumber String?          @unique
+  phoneNumber String?    @unique
   email       String
   password    String
-  tenants     LandlordTenant[]
-  property    Property[]
-  company     String           @default("Jodex")
-  createdAT   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  properties  Property[]
+  company     String     @default("Jodex")
+  createdAT   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Tenant {
-  id         String           @id @unique @default(uuid())
+  id         String   @id @unique @default(uuid())
   userName   String
   email      String
   password   String
-  landlords  LandlordTenant[]
-  //property           Property        @relation(fields: [landlordPropertyId], references: [id])
-  createdAT  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
-  company    String           @default("Jodex")
-  //jodex landlordPropertyId String
-  Property   Property?        @relation(fields: [propertyId], references: [id])
-  propertyId String?
-}
-
-model LandlordTenant {
-  id         String   @id @unique @default(uuid())
-  tenant     Tenant   @relation(fields: [tenantId], references: [id])
-  tenantId   String
-  landlord   Landlord @relation(fields: [landlordId], references: [id])
-  landlordId String
+  createdAT  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   company    String   @default("Jodex")
+  Properties Property @relation(fields: [id], references: [id])
 }
 
 model Property {
   id          String   @id @unique @default(uuid())
-  flat        String
+  flat        Int
   unit        Int
   city        String
   state       String
@@ -91,21 +77,16 @@ model Property {
   wifi        Boolean
   houseType   String
   address     String
-  landlord    Landlord @relation(fields: [landlordId], references: [id])
-  landlordId  String
   createdAT   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   company     String   @default("Jodex")
-  Tenant      Tenant[]
+  Tenants     Tenant[]
+  Landlord    Landlord @relation(fields: [landlordId], references: [id])
+  landlordId  String
 }
 
 enum UserType {
   landlord
   tenant
   Admin
-}
-
-enum LandlordStatus {
-  ACTIVE
-  BLOCKED
 }
