@@ -22,17 +22,19 @@ model JodexAdmin {
 }
 
 model User {
-  id              String   @id @unique @default(uuid())
+  id              String    @id @unique @default(uuid())
   userName        String
-  phoneNumber     String?  @unique
+  phoneNumber     String?   @unique
   email           String
   password        String
   passwordConfirm String
   picture         String?
   user            String
-  company         String   @default("Jodex")
-  createdAT       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  company         String    @default("Jodex")
+  createdAT       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  Landlord        Landlord?
+  Tenant          Tenant?
 
   @@map("users")
 }
@@ -43,6 +45,8 @@ model Landlord {
   phoneNumber String?    @unique
   email       String
   password    String
+  userId      String     @unique
+  user        User       @relation(fields: [userId], references: [id])
   properties  Property[]
   company     String     @default("Jodex")
   createdAT   DateTime   @default(now())
@@ -50,14 +54,17 @@ model Landlord {
 }
 
 model Tenant {
-  id         String   @id @unique @default(uuid())
-  userName   String
-  email      String
-  password   String
-  createdAT  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  company    String   @default("Jodex")
-  Properties Property @relation(fields: [id], references: [id])
+  id          String   @id @unique @default(uuid())
+  userName    String
+  phoneNumber String?  @unique
+  email       String
+  password    String
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  createdAT   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  company     String   @default("Jodex")
+  Properties  Property @relation(fields: [id], references: [id])
 }
 
 model Property {

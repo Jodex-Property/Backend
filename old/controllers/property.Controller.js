@@ -11,11 +11,11 @@ export const createProperty = async (req, res, next) => {
   //     res.send("This property already exists");
   //   }
 
-  // const landlordId = req.user.id;
+  const landlordId = req.user.id;
   const property = await prismaClient.property.create({
     data: {
       ...req.body,
-      // landlordId,
+      landlordId,
     },
   });
   res.json(property);

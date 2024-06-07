@@ -1,25 +1,8 @@
 import { Router } from "express";
-import { errorHandler } from "../error-handler.js";
-import {
-  createProperty,
-  getProperties,
-} from "../controllers/property.Controller.js";
-import { authMiddleware } from "../middleware/authMiddleware.js";
-import { landlordMiddleware } from "../middleware/landlordMiddleware.js";
-import { tenantMiddleware } from "../middleware/tenantMiddleware.js";
+import { newProperty } from "../controllers/property.js";
 
-const propertyRoute = Router();
+const propertyRouter = Router();
 
-propertyRoute.post(
-  "/",
-  [authMiddleware, landlordMiddleware],
-  errorHandler(createProperty)
-);
+propertyRouter.post("/", newProperty);
 
-propertyRoute.get(
-  "/getProperties",
-  [authMiddleware, tenantMiddleware],
-  errorHandler(getProperties)
-);
-
-export default propertyRoute;
+export default propertyRouter;

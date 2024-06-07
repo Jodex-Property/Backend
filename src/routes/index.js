@@ -1,12 +1,10 @@
 import { Router } from "express";
-import authRoute from "./auth.js";
-//import { createProperty } from "../controllers/property.Controller.js";
-import propertyRoute from "./property.js";
-import landlordRoute from "./landlord.js";
+import authRoutes from "./auth.js";
+import propertyRouter from "./property.js";
+
 const appRoute = Router();
 
-appRoute.use("/auth", authRoute);
-appRoute.use("/property", propertyRoute);
-appRoute.use("/landlords", landlordRoute);
+appRoute.use("/auth", authRoutes);
+appRoute.use("auth", propertyRouter);
 
 export default appRoute;
