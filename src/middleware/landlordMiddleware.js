@@ -7,7 +7,7 @@ import { ErrorCodes } from "../exception/root.js";
 export const landlordMiddleware = async (req, res, next) => {
   const user = req.user;
 
-  if (user.user == "landlord" || user.user == "LANDLORD") {
+  if (user?.userType == "LANDLORD") {
     next();
   } else {
     next(new UnauthorizedException("Unauthorized", ErrorCodes.UNAUTHORIZED));

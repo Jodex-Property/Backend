@@ -31,29 +31,10 @@ export const signup = async (req, res, next) => {
       password: hashSync(password, 10),
       userName,
       passwordConfirm: hashSync(passwordConfirm, 10),
-      user: userType,
+      userType: userType,
     },
   });
-  // if (userType == "LANDLORD") {
-  //   landlord = await prismaClient.landlord.create({
-  //     data: {
-  //       userName: user.userName,
-  //       email: user.email,
-  //       password: hashSync(user.password, 10),
-  //     },
-  //   });
-  //   console.log(`Landlord id is ${landlord.id}`);
-  // } else if (userType === "TENANT") {
-  //   await prismaClient.tenant.create({
-  //     data: {
-  //       userName: user.userName,
-  //       email: user.email,
-  //       password: hashSync(user.password, 10),
-  //     },
-  //   });
-  //   console.log(`tenant is ${tenant.id}`);
-  // }
-  //}
+
   // console.log(userType);
   const token = jwt.sign({ userId: user.id }, JWT_SECRET);
   user.password = undefined;

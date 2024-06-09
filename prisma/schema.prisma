@@ -22,50 +22,60 @@ model JodexAdmin {
 }
 
 model User {
-  id              String    @id @unique @default(uuid())
+  id              String     @id @unique @default(uuid())
   userName        String
-  phoneNumber     String?   @unique
+  phoneNumber     String?    @unique
   email           String
   password        String
   passwordConfirm String
   picture         String?
-  user            String
-  company         String    @default("Jodex")
-  createdAT       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  Landlord        Landlord?
-  Tenant          Tenant?
+  company         String     @default("Jodex")
+  createdAT       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  properties      Property[]
+  userType        UserType
+  rentals         Rental[]   @relation("TenantRentals")
 
-  @@map("users")
+  // @@map("users")
 }
 
-model Landlord {
-  id          String     @id @unique @default(uuid())
-  userName    String
-  phoneNumber String?    @unique
-  email       String
-  password    String
-  userId      String     @unique
-  user        User       @relation(fields: [userId], references: [id])
-  properties  Property[]
-  company     String     @default("Jodex")
-  createdAT   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+model Rental {
+  id         String    @id @default(cuid())
+  propertyId String
+  tenantId   String
+  property   Property  @relation(fields: [propertyId], references: [id])
+  tenant     User      @relation(fields: [tenantId], references: [id], name: "TenantRentals")
+  startDate  DateTime
+  endDate    DateTime?
 }
 
-model Tenant {
-  id          String   @id @unique @default(uuid())
-  userName    String
-  phoneNumber String?  @unique
-  email       String
-  password    String
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id])
-  createdAT   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  company     String   @default("Jodex")
-  Properties  Property @relation(fields: [id], references: [id])
-}
+// model Landlord {
+//   id          String   @id @unique @default(uuid())
+//   userName    String
+//   phoneNumber String?  @unique
+//   email       String
+//   password    String
+//   userId      String   @unique
+//   user        User     @relation(fields: [userId], references: [id])
+//   // properties  Property[]
+//   company     String   @default("Jodex")
+//   createdAT   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+// }
+
+// model Tenant {
+//   id          String   @id @unique @default(uuid())
+//   userName    String
+//   phoneNumber String?  @unique
+//   email       String
+//   password    String
+//   userId      String   @unique
+//   user        User     @relation(fields: [userId], references: [id])
+//   createdAT   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+//   company     String   @default("Jodex")
+//   Properties  Property @relation(fields: [id], references: [id])
+// }
 
 model Property {
   id          String   @id @unique @default(uuid())
@@ -87,13 +97,13 @@ model Property {
   createdAT   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   company     String   @default("Jodex")
-  Tenants     Tenant[]
-  Landlord    Landlord @relation(fields: [landlordId], references: [id])
+  // Tenants     Tenant[]
   landlordId  String
+  landlord    User     @relation(fields: [landlordId], references: [id])
+  rentals     Rental[]
 }
 
 enum UserType {
-  landlord
-  tenant
-  Admin
+  LANDLORD
+  TENANT
 }
