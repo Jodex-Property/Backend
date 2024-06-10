@@ -5,7 +5,7 @@ export const getLandlordProperties = async (req, res, next) => {
     // Assuming the landlord's ID is available in req.user.id
     const landlordId = req.user.id;
 
-    const properties = await prisma.property.findMany({
+    const properties = await prismaClient.property.findMany({
       where: { landlordId },
       include: {
         landlord: {
@@ -31,7 +31,7 @@ export const getLandlordProperties = async (req, res, next) => {
       },
     });
 
-    if (!properties.length) {
+    if (properties.length === 0) {
       return res
         .status(404)
         .json({ message: "No properties found for this landlord" });
@@ -43,17 +43,17 @@ export const getLandlordProperties = async (req, res, next) => {
   }
 };
 export const getLandlordProperty = async (req, res, next) => {
-  const { id: landlordId } = req.body;
   try {
-    const property = await prismaClient.property.findMany({
-      where: { landlordId },
+    const { propertyId } = req.params;
+    const { id: landlordId } = req.body;
+    const property = await prismaClient.property.findFirst({
+      where: { id: propertyId, landlordId },
       include: {
         landlord: {
           select: {
             id: true,
             email: true,
             userType: true,
-            userName: true,
             // Include other fields you want to expose
           },
         },
@@ -71,6 +71,11 @@ export const getLandlordProperty = async (req, res, next) => {
         },
       },
     });
+    if (!property) {
+      return res.status(404).json({ message: "Property not found" });
+    }
+
+    res.status(200).json(property);
   } catch (err) {
     next(err);
   }

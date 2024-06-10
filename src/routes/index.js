@@ -6,7 +6,7 @@ import landlordRoute from "./landlord.js";
 const appRoute = Router();
 
 appRoute.use("/auth", authRoutes);
-appRoute.use("auth", propertyRouter);
+//appRoute.use("auth", propertyRouter);
 appRoute.use("/property", propertyRouter);
 appRoute.use("/landlord", landlordRoute);
 

@@ -1,9 +1,24 @@
 import { Router } from "express";
-import { getLandlordProperty } from "../controllers/landlord.js";
+import {
+  getLandlordProperties,
+  getLandlordProperty,
+} from "../controllers/landlord.js";
 import { landlordMiddleware } from "../middleware/landlordMiddleware.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const landlordRoute = Router();
 
-landlordRoute.get("/property", [landlordMiddleware], getLandlordProperty);
+landlordRoute.get(
+  "/properties",
+  [authMiddleware],
+  [landlordMiddleware],
+  getLandlordProperties
+);
 
+landlordRoute.get(
+  "/properties/:propertyId",
+  [authMiddleware],
+  [landlordMiddleware],
+  getLandlordProperty
+);
 export default landlordRoute;

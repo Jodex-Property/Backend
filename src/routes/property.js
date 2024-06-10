@@ -11,6 +11,7 @@ const propertyRouter = Router();
 
 propertyRouter.post("/", [authMiddleware], [landlordMiddleware], newProperty);
 propertyRouter.get("/getProperties", authMiddleware, getProperties);
-propertyRouter.get("/:id", authMiddleware, getPropertyById);
+propertyRouter.get("getProperties/:id", [authMiddleware], getPropertyById);
+// propertyRouter.get("/:id", authMiddleware, getPropertyById);
 
 export default propertyRouter;
