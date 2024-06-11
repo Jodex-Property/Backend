@@ -1,5 +1,34 @@
 import { prismaClient } from "../../app.js";
 
+export const getAllLandlords = async (req, res, next) => {
+  try {
+    const landlords = await prismaClient.user.findMany({
+      where: {
+        userType: "LANDLORD",
+      },
+    });
+    landlords.password = undefined;
+    landlords.passwordConfirm = undefined;
+    res.status(200).json({ message: "success", tenants });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getLandLandlordById = async (req, res, next) => {
+  try {
+    const { id: landlordId } = req.body;
+    const landlord = await prismaClient.user.findFirst({
+      where: { userType: "LANDLORD" },
+    });
+    landlord.password = undefined;
+    landlord.passwordConfirm = undefined;
+    res.status(200).json({ message: "success", tenants });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getLandlordProperties = async (req, res, next) => {
   try {
     // Assuming the landlord's ID is available in req.user.id

@@ -1,7 +1,7 @@
 import express from "express";
 import { PORT } from "./src/secrets.js";
 import appRoute from "./src/routes/index.js";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const app = express();
 

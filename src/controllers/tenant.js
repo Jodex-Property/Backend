@@ -7,8 +7,8 @@ export const getAllTenants = async (req, res, next) => {
         userType: "TENANT",
       },
     });
-    let password = undefined;
-    let passwordConfirm = undefined;
+    tenants.password = undefined;
+    tenants.passwordConfirm = undefined;
     res.status(200).json({ message: "success", tenants });
   } catch (error) {
     next(error);

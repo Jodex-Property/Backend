@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: your-service-name
+    env: node
+    buildCommand: |
+      npm install
+      npx prisma generate
+      npx prisma migrate deploy
+    startCommand: npm run dev
+    envVars:
+      - key: DATABASE_URL
+        value: process.env.DATABASE_URL
+      - key: NODE_ENV
+        value: "production"
+      - key: JWT_SECRET
+        value: process.env.JWT_SECRET
