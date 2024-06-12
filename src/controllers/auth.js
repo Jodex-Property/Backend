@@ -39,7 +39,7 @@ export const signup = async (req, res, next) => {
   const token = jwt.sign({ userId: user.id }, JWT_SECRET);
   user.password = undefined;
   user.passwordConfirm = undefined;
-  res.header("x-auth-token", token).status(201).json({ user });
+  res.header("x-auth-token", token).status(201).json({ user, token });
 };
 
 export const login = async (req, res, next) => {
@@ -64,3 +64,5 @@ export const login = async (req, res, next) => {
 export const me = async (req, res) => {
   res.json(req.user);
 };
+
+export const google = async (req, res, next) => {};

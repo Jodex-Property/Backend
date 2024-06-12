@@ -106,4 +106,7 @@ model Property {
 enum UserType {
   LANDLORD
   TENANT
+  ADMIN
+  AGENT
+  PROPERTY_MANAGER
 }
