@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../secrets.js";
-import { prismaClient } from "../../app.js";
+import { prisma } from "../../app.js";
 import { UnauthorizedException } from "../exception/unauthorized.js";
 import { ErrorCodes } from "../exception/root.js";
 

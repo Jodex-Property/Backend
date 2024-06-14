@@ -1,4 +1,4 @@
-import { prismaClient } from "../../app.js";
+import { prisma } from "../../app.js";
 import { hashSync } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { compareSync } from "bcrypt";
@@ -6,18 +6,19 @@ import { JWT_SECRET } from "../secrets.js";
 import { BadRequests } from "../exception/bad-request.js";
 import { ErrorCodes } from "../exception/root.js";
 import { UnprocessableEntity } from "../exception/validation.js";
-import { SignUpSchema } from "../schemas/user.js";
+//import { SignUpSchema } from "../schemas/user.js";
 import { NotFound } from "../exception/not-found.js";
 
 export const signup = async (req, res, next) => {
-  SignUpSchema.parse(req.body);
-  const { email, password, passwordConfirm, userName, userType } = req.body;
+  // SignUpSchema.parse(req.body);
+  const { email, password, passwordConfirm, userName, userType, fullName } =
+    req.body;
 
   if (password !== passwordConfirm) {
     return res.json({ message: "Passwords do not match" });
   }
 
-  let user = await prismaClient.user.findFirst({ where: { email } });
+  let user = await prisma.user.findFirst({ where: { email } });
 
   if (user) {
     // throw Error("User exists");
@@ -25,13 +26,14 @@ export const signup = async (req, res, next) => {
       new BadRequests("User already exists", ErrorCodes.USER_ALREADY_EXISTS)
     );
   }
-  user = await prismaClient.user.create({
+  user = await prisma.user.create({
     data: {
       email,
       password: hashSync(password, 10),
       userName,
       passwordConfirm: hashSync(passwordConfirm, 10),
       userType: userType,
+      fullName,
     },
   });
 
@@ -45,7 +47,7 @@ export const signup = async (req, res, next) => {
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  let user = await prismaClient.user.findFirst({ where: { email } });
+  let user = await prisma.user.findFirst({ where: { email } });
   if (!user) {
     res.json({ message: "This user does not exist" });
   }

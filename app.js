@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to Jodex Property");
 });
 
-export const prismaClient = new PrismaClient({
+export const prisma = new PrismaClient({
   log: ["query"],
 });
 

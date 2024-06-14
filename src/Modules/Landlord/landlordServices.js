@@ -1,4 +1,4 @@
-import { prisma } from "../../app.js";
+import { prisma } from "../../../app.js";
 
 export const getAllLandlords = async (req, res, next) => {
   try {

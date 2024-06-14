@@ -1,8 +1,8 @@
-import { prismaClient } from "../../app.js";
+import { prisma } from "../../app.js";
 
 export const getAllTenants = async (req, res, next) => {
   try {
-    const tenants = await prismaClient.user.findMany({
+    const tenants = await prisma.user.findMany({
       where: {
         userType: "TENANT",
       },

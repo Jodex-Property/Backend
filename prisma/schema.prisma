@@ -23,9 +23,10 @@ model JodexAdmin {
 
 model User {
   id              String     @id @unique @default(uuid())
-  userName        String
+  userName        String     @unique
   phoneNumber     String?    @unique
-  email           String
+  email           String     @unique
+  fullName        String
   password        String
   passwordConfirm String
   picture         String?
@@ -35,8 +36,10 @@ model User {
   properties      Property[]
   userType        UserType
   rentals         Rental[]   @relation("TenantRentals")
+  role            Role       @default(USER)
 
   // @@map("users")
+  Payment Payment[]
 }
 
 model Rental {
@@ -47,6 +50,59 @@ model Rental {
   tenant     User      @relation(fields: [tenantId], references: [id], name: "TenantRentals")
   startDate  DateTime
   endDate    DateTime?
+}
+
+model Payment {
+  id         String   @id @default(cuid())
+  amount     Float
+  status     String
+  userId     String
+  propertyId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model Property {
+  id          String    @id @unique @default(uuid())
+  flat        Int
+  unit        Int
+  city        String
+  state       String
+  zipCode     Int
+  description String
+  rooms       Int
+  bath        Int
+  kitchen     Int
+  diningRoom  Int
+  pictures    String
+  garage      Boolean
+  wifi        Boolean
+  houseType   String
+  address     String
+  createdAT   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  company     String    @default("Jodex")
+  // Tenants     Tenant[]
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  rentals     Rental[]
+  Payment     Payment[]
+}
+
+enum UserType {
+  LANDLORD
+  TENANT
+  ADMIN
+  AGENT
+  PROPERTY_MANAGER
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 // model Landlord {
@@ -76,37 +132,3 @@ model Rental {
 //   company     String   @default("Jodex")
 //   Properties  Property @relation(fields: [id], references: [id])
 // }
-
-model Property {
-  id          String   @id @unique @default(uuid())
-  flat        Int
-  unit        Int
-  city        String
-  state       String
-  zipCode     Int
-  description String
-  rooms       Int
-  bath        Int
-  kitchen     Int
-  diningRoom  Int
-  pictures    String
-  garage      Boolean
-  wifi        Boolean
-  houseType   String
-  address     String
-  createdAT   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  company     String   @default("Jodex")
-  // Tenants     Tenant[]
-  landlordId  String
-  landlord    User     @relation(fields: [landlordId], references: [id])
-  rentals     Rental[]
-}
-
-enum UserType {
-  LANDLORD
-  TENANT
-  ADMIN
-  AGENT
-  PROPERTY_MANAGER
-}

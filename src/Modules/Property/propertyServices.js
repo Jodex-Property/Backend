@@ -1,5 +1,23 @@
 //import { property } from "lodash";
-import { prisma } from "../../app.js";
+import { prisma } from "../../../app.js";
+
+// export const createProperty = async (propertyData, userId) => {
+//   //   let imageUrl = null;
+
+//   //   if (file) {
+//   //     imageUrl = await uploadToS3(file);
+//   //   }
+
+//   const property = await prisma.property.create({
+//     data: {
+//       ...propertyData,
+//       //   imageUrl,
+//       userId, // Include the user ID here
+//     },
+//   });
+
+//   return property;
+// };
 
 export const newProperty = async (req, res, next) => {
   try {
