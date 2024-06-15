@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { updateUser } from "../controllers/user.js";
+
 import * as userController from "../Modules/Users/users.controller.js";
 import { errorHandler } from "../error-handler.js";
 
