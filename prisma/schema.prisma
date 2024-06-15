@@ -33,27 +33,30 @@ model User {
   company         String     @default("Jodex")
   createdAT       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
-  properties      Property[]
+  property        Property[]
   userType        UserType
   rentals         Rental[]   @relation("TenantRentals")
   role            Role       @default(USER)
 
-  // @@map("users")
   Payment Payment[]
+  Rental  Rental[]
 }
 
 model Rental {
   id         Int          @id @default(autoincrement())
   propertyId Int
-  property   Property     @relation(fields: [propertyId], references: [id])
+  // property   Property     @relation(fields: [propertyId], references: [id])
   tenantId   Int
-  tenant     User         @relation("TenantRentals", fields: [tenantId], references: [id])
+  // tenant     User         @relation("TenantRentals", fields: [tenantId], references: [id])
   status     RentalStatus @default(PENDING)
   startDate  DateTime
   endDate    DateTime
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   payments   Payment[]
+  User       User?        @relation(fields: [userId], references: [id])
+  userId     String?
+  User       User?        @relation(fields: [userId], references: [id])
 }
 
 model Payment {
@@ -66,6 +69,8 @@ model Payment {
   updatedAt  DateTime      @updatedAt
   User       User?         @relation(fields: [userId], references: [id])
   userId     String?
+  // Property   Property?     @relation(fields: [propertyId], references: [id])
+  // propertyId String?
   Property   Property?     @relation(fields: [propertyId], references: [id])
   propertyId String?
 }
@@ -91,10 +96,12 @@ model Property {
   updatedAt   DateTime @updatedAt
   company     String   @default("Jodex")
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  rentals     Rental[]
+  // user        User     @relation(fields: [userId], references: [id])
+  //rentals     Rental[]
 
   Payment Payment[]
+  // User    User      @relation(fields: [userId], references: [id])
+  User    User      @relation(fields: [userId], references: [id])
 }
 
 enum UserType {
